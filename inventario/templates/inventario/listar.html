@@ -1,0 +1,48 @@
+{% extends 'inventario/base.html' %}
+{% block contenido %}
+<h2>Lista de productos</h2>
+{% if user.is_authenticated %}
+    <a href="{% url 'crear_producto' %}">
+        Agregar producto
+    </a>
+{% endif %}
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Cantidad</th>
+            <th>Correo de contacto</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for producto in productos %}
+        <tr>
+            <td>{{ producto.id }}</td>
+            <td>{{ producto.nombre }}</td>
+            <td>{{ producto.cantidad }}</td>
+            <td>{{ producto.correo_contacto }}</td>
+            <td>
+                {% if user.is_authenticated %}
+                <a href="{% url 'editar_producto' producto.id %}">
+                    Editar
+                </a>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                <a href="{% url 'eliminar_producto' producto.id %}">
+                    Eliminar
+                </a>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5">No hay productos registrados.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
