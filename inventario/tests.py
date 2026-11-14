@@ -1,19 +1,15 @@
 from django.test import TestCase
 from .forms import ProductoForm
 from django.urls import reverse
-
 # Create your tests here.
 
 class PruebasValidacionProducto(TestCase):
-
-    
     def test_cantidad_minima(self):
         datos = {
             'nombre': 'Producto minimo',
             'cantidad': 1,
             'correo_contacto': 'prueba@ejemplo.com'
         }
-
         formulario = ProductoForm(data=datos)
         self.assertTrue(formulario.is_valid())
 
@@ -23,7 +19,6 @@ class PruebasValidacionProducto(TestCase):
             'cantidad': 50,
             'correo_contacto': 'prueba@ejemplo.com'
         }
-
         formulario = ProductoForm(data=datos)
         self.assertTrue(formulario.is_valid())
 
@@ -33,7 +28,6 @@ class PruebasValidacionProducto(TestCase):
             'cantidad': 51,
             'correo_contacto': 'prueba@ejemplo.com'
         }
-
         formulario = ProductoForm(data=datos)
         self.assertFalse(formulario.is_valid())
         self.assertIn('cantidad', formulario.errors)
@@ -44,7 +38,6 @@ class PruebasValidacionProducto(TestCase):
             'cantidad': 10,
             'correo_contacto': 'contacto@ejemplo.com'
         }
-
         formulario = ProductoForm(data=datos)
         self.assertTrue(formulario.is_valid())
 
@@ -54,7 +47,6 @@ class PruebasValidacionProducto(TestCase):
             'cantidad': 10,
             'correo_contacto': 'correo-invalido'
         }
-
         formulario = ProductoForm(data=datos)
         self.assertFalse(formulario.is_valid())
         self.assertIn('correo_contacto', formulario.errors)
@@ -65,22 +57,18 @@ class PruebasValidacionProducto(TestCase):
             'cantidad': 10,
             'correo_contacto': ''
         }
-
         formulario = ProductoForm(data=datos)
         self.assertFalse(formulario.is_valid())
         self.assertIn('correo_contacto', formulario.errors)
 
     def test_correo_demasiado_largo(self):
         correo_largo = ('a' * 100) + '@ejemplo.com'
-
         datos = {
             'nombre': 'Producto correo largo',
             'cantidad': 10,
             'correo_contacto': correo_largo
         }
-
         formulario = ProductoForm(data=datos)
-
         self.assertFalse(formulario.is_valid())
         self.assertIn('correo_contacto', formulario.errors)
 
@@ -95,3 +83,11 @@ class PruebasAcceso(TestCase):
         url = reverse('listar_productos')
         respuesta = self.client.get(url, secure=True)
         self.assertEqual(respuesta.status_code, 200)
+
+    def test_listar_rechaza_post(self):
+        respuesta = self.client.post(
+            reverse('listar_productos'),
+            secure=True
+        )
+        self.assertEqual(respuesta.status_code, 405)
+        self.assertEqual(respuesta.headers.get('Allow'), 'GET')

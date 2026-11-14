@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_GET
 from .models import Producto
 from .forms import ProductoForm
 
 
 # Create your views here.
-
+@require_GET
 def listar_productos(request):
     productos = Producto.objects.all()
     return render(request, 'inventario/listar.html', {
