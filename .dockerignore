@@ -1,0 +1,33 @@
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+
+# Secretos y variables locales
+.env
+.env.*
+
+# Base de datos local
+*.sqlite3
+*.sqlite3-journal
+
+# Git
+.git/
+.gitignore
+
+# SonarQube
+.scannerwork/
+
+# Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Django
+staticfiles/
+
+# Archivos del sistema y editores
+.DS_Store
+.vscode/
+.idea/

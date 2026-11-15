@@ -1,0 +1,19 @@
+
+services:
+  web:
+    build: .
+    container_name: crud-django
+    env_file:
+      - .env.example
+    environment:
+      DB_NAME: /app/data/db.sqlite3
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - django_data:/app/data
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000 --insecure"
+
+volumes:
+  django_data:
